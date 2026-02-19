@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>線抽出（ソベルフィルタ）</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+}
+.box {
+	display: flex;
+	text-align: center;
+	align-items: center;
+}
+.filtered {
+	filter: url(#edge-filter);
+}
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+	<defs>
+		<filter id="edge-filter">
+			<!-- ソベルフィルタ（横方向のエッジ検出） -->
+			<feConvolveMatrix
+				order="3"
+				kernelMatrix="
+					-1 -2 -1
+					 0  0  0
+					 1  2  1
+				"
+				preserveAlpha="true"
+				result="edgeH"
+			/>
+			<!-- ソベルフィルタ（縦方向のエッジ検出） -->
+			<feConvolveMatrix
+				in="SourceGraphic"
+				order="3"
+				kernelMatrix="
+					-1 0 1
+					-2 0 2
+					-1 0 1
+				"
+				preserveAlpha="true"
+				result="edgeV"
+			/>
+			<!-- 縦横のエッジを合成 -->
+			<feBlend in="edgeH" in2="edgeV" mode="screen" />
+		</filter>
+	</defs>
+</svg>
+
+<div class="box">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+<div class="box filtered">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+</body>
+</html>

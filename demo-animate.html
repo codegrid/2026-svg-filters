@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>アニメーション付きSVGフィルターのデモ</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+}
+.box {
+	display: flex;
+	text-align: center;
+	align-items: center;
+}
+.filtered {
+	filter: url(#animated-filter);
+}
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+  <defs>
+		<filter id="animated-filter">
+			<feTurbulence type="fractalNoise" baseFrequency="0.0025" numOctaves="8" />
+			<!-- feDisplacementMap の scale 属性は、animate で与える -->
+			<feDisplacementMap id="distortion" in="SourceGraphic">
+				<animate attributeName="scale" values="20; 50; 10; 20" dur="5s" repeatCount="indefinite"></animate>
+			</feDisplacementMap>
+		</filter>
+  </defs>
+</svg>
+
+<div class="box">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+<div class="box filtered">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+</body>
+</html>

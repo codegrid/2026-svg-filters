@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>色の乗算</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+}
+.box {
+	display: flex;
+	text-align: center;
+	align-items: center;
+}
+.filtered {
+	filter: url(#multiply-filter);
+}
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+	<defs>
+		<filter id="multiply-filter">
+			<!-- 赤色で塗りつぶし -->
+			<feFlood flood-color="#ff6666" result="color" />
+			<!-- 元画像と乗算で合成 -->
+			<feBlend in="SourceGraphic" in2="color" mode="multiply" result="multiplied" />
+			<!-- 元画像のアルファチャンネルで切り抜く -->
+			<feComposite in="multiplied" in2="SourceGraphic" operator="in" />
+		</filter>
+	</defs>
+</svg>
+
+<div class="box">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+<div class="box filtered">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>歪ませる</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+}
+.box {
+	display: flex;
+	text-align: center;
+	align-items: center;
+}
+.filtered {
+	filter: url(#distort-filter);
+}
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+	<defs>
+		<filter id="distort-filter">
+			<!-- ノイズを生成 -->
+			<feTurbulence
+				type="turbulence"
+				baseFrequency="0.02"
+				numOctaves="3"
+				result="noise"
+			/>
+			<!-- ノイズを使って画像を歪ませる -->
+			<feDisplacementMap
+				in="SourceGraphic"
+				in2="noise"
+				scale="20"
+				xChannelSelector="R"
+				yChannelSelector="G"
+			/>
+		</filter>
+	</defs>
+</svg>
+
+<div class="box">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+<div class="box filtered">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+</body>
+</html>

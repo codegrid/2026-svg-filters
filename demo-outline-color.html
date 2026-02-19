@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>アルファチャンネルに枠線をつける</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+}
+.box {
+	display: flex;
+	text-align: center;
+	align-items: center;
+}
+.filtered {
+	filter: url(#outline-filter);
+}
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+	<defs>
+		<filter id="outline-filter">
+			<!-- 元のアルファチャンネルを膨張させる -->
+			<feMorphology in="SourceAlpha" operator="dilate" radius="4" result="dilated" />
+			<!-- 膨張した部分を赤色で塗りつぶす -->
+			<feFlood flood-color="#e74c3c" result="color" />
+			<feComposite in="color" in2="dilated" operator="in" result="outline" />
+			<!-- 元画像を上に重ねる -->
+			<feMerge>
+				<feMergeNode in="outline" />
+				<feMergeNode in="SourceGraphic" />
+			</feMerge>
+		</filter>
+	</defs>
+</svg>
+
+<div class="box">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+<div class="box filtered">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+</body>
+</html>

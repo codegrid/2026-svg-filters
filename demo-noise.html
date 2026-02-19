@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>ノイズでくり抜き</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+}
+.box {
+	display: flex;
+	text-align: center;
+	align-items: center;
+}
+.filtered {
+	filter: url(#noise-filter);
+}
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+	<defs>
+		<filter id="noise-filter">
+			<!-- フィルム粒子風のノイズを生成 -->
+			<feTurbulence
+				type="fractalNoise"
+				baseFrequency="0.5"
+				numOctaves="4"
+				result="noise"
+			/>
+			<!-- ノイズをグレースケールに変換 -->
+			<feColorMatrix
+				in="noise"
+				type="saturate"
+				values="0"
+				result="grayNoise"
+			/>
+			<!-- ノイズを元画像にオーバーレイ -->
+			<feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" result="blended" />
+			<!-- ノイズにコントラストをつけてアルファチャンネルに変換 -->
+			<feComponentTransfer in="grayNoise" result="contrastNoise">
+				<feFuncR type="linear" slope="5" intercept="-1.5" />
+				<feFuncG type="linear" slope="5" intercept="-1.5" />
+				<feFuncB type="linear" slope="5" intercept="-1.5" />
+			</feComponentTransfer>
+			<feColorMatrix
+				in="contrastNoise"
+				type="matrix"
+				values="0 0 0 0 0
+				        0 0 0 0 0
+				        0 0 0 0 0
+				        1 0 0 0 0"
+				result="noiseAlpha"
+			/>
+			<!-- 元画像のアルファとノイズアルファを合成 -->
+			<feComposite in="blended" in2="SourceGraphic" operator="in" result="clipped" />
+			<!-- ノイズ部分をくり抜く -->
+			<feComposite in="clipped" in2="noiseAlpha" operator="in" />
+		</filter>
+	</defs>
+</svg>
+
+<div class="box">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+<div class="box filtered">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+</body>
+</html>

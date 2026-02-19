@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>電気エフェクト</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+}
+.box {
+	display: flex;
+	text-align: center;
+	align-items: center;
+}
+.filtered {
+	filter: url(#electric-filter);
+}
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+	<defs>
+		<filter id="electric-filter">
+			<!-- 高周波のノイズでギザギザ感を出す -->
+			<feTurbulence
+				type="turbulence"
+				baseFrequency="0.05 0.5"
+				numOctaves="2"
+				result="noise"
+			>
+				<animate
+					attributeName="baseFrequency"
+					values="0.05 0.5;0.08 0.6;0.05 0.5"
+					dur="0.1s"
+					repeatCount="indefinite"
+				/>
+			</feTurbulence>
+			<!-- ノイズで元画像を歪ませる -->
+			<feDisplacementMap
+				in="SourceGraphic"
+				in2="noise"
+				scale="4"
+				xChannelSelector="R"
+				yChannelSelector="G"
+				result="displaced"
+			>
+				<animate attributeName="scale" values="3;6;3" dur="0.15s" repeatCount="indefinite" />
+			</feDisplacementMap>
+			<!-- 電気の青白い色に変換 -->
+			<feColorMatrix
+				in="displaced"
+				type="matrix"
+				values="0.5 0.5 0.5 0 0.3
+				        0.8 0.8 0.8 0 0.5
+				        1   1   1   0 0.8
+				        0   0   0   1 0"
+				result="colored"
+			/>
+			<!-- グローを追加 -->
+			<feGaussianBlur in="colored" stdDeviation="2" result="glow" />
+			<feMerge>
+				<feMergeNode in="glow" />
+				<feMergeNode in="colored" />
+			</feMerge>
+		</filter>
+	</defs>
+</svg>
+
+<div class="box">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+<div class="box filtered">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+</body>
+</html>

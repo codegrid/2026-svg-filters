@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>グロー（発光）</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+}
+.box {
+	display: flex;
+	text-align: center;
+	align-items: center;
+}
+.filtered {
+	filter: url(#glow-filter);
+}
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+	<defs>
+		<filter id="glow-filter">
+			<!-- 元画像をぼかして発光部分を作る -->
+			<feGaussianBlur in="SourceGraphic" stdDeviation="4" />
+			<!-- ぼかし部分を緑色に変換 -->
+			<feColorMatrix
+				type="matrix"
+				values="0 0 0 0 0
+				        0 0 0 0 0.8
+				        0 0 0 0 0
+				        0 0 0 1 0"
+			/>
+			<!-- ぼかしを重ねて発光を強調 -->
+			<feMerge>
+				<feMergeNode />
+				<feMergeNode in="SourceGraphic" />
+			</feMerge>
+		</filter>
+	</defs>
+</svg>
+
+<div class="box">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+<div class="box filtered">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+</body>
+</html>

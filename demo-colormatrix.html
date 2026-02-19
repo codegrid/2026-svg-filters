@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>feColorMatrix（単色塗りつぶし）</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+}
+.box {
+	display: flex;
+	text-align: center;
+	align-items: center;
+}
+.filtered {
+	filter: url(#colormatrix-filter);
+}
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+	<defs>
+		<!--
+			feColorMatrixの行列:
+			| R' |   | 0 0 0 0 0.2 |    | R |
+			| G' |   | 0 0 0 0 0.6 |    | G |
+			| B' | = | 0 0 0 0 0.9 | × | B |
+			| A' |   | 0 0 0 1 0   |    | A |
+			                            | 1 |
+
+			この行列では、アルファチャンネル（A）はそのまま維持し、
+			RGB値は入力に関係なく固定値（0.2, 0.6, 0.9）= 青色に設定されます。
+		-->
+		<filter id="colormatrix-filter">
+			<feColorMatrix
+				type="matrix"
+				values="0 0 0 0 0.2
+				        0 0 0 0 0.6
+				        0 0 0 0 0.9
+				        0 0 0 1 0"
+			/>
+		</filter>
+	</defs>
+</svg>
+
+<div class="box">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+<div class="box filtered">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+</body>
+</html>

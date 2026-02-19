@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>スケッチ（手書き風）</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+}
+.box {
+	display: flex;
+	text-align: center;
+	align-items: center;
+}
+.filtered {
+	filter: url(#sketch-filter);
+}
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+	<defs>
+		<filter id="sketch-filter">
+			<!-- 細かいノイズを生成 -->
+			<feTurbulence
+				type="turbulence"
+				baseFrequency="0.05"
+				numOctaves="2"
+				result="noise"
+			/>
+			<!-- ノイズで少し歪ませて手書き風に -->
+			<feDisplacementMap
+				in="SourceGraphic"
+				in2="noise"
+				scale="3"
+				xChannelSelector="R"
+				yChannelSelector="G"
+			/>
+		</filter>
+	</defs>
+</svg>
+
+<div class="box">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+<div class="box filtered">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+</body>
+</html>
