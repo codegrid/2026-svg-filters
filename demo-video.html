@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>背景適用: フロウエフェクト</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+}
+
+.container {
+	position: relative;
+	padding: 64px;
+}
+
+.container video {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.box {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	text-align: center;
+	align-items: center;
+}
+
+.bg {
+	position: absolute;
+	z-index: -1;
+	inset: 0;
+	filter: url(#glass-distortion);
+	backdrop-filter: blur(0);
+	pointer-events: none;
+	border: 1px solid red;
+}
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+	<defs>
+		<filter id="glass-distortion">
+			<feTurbulence type="fractalNoise" baseFrequency="0.025 0.025" numOctaves="2" result="noise" />
+			<feGaussianBlur in="noise" stdDeviation="16" result="blurred" />
+			<feDisplacementMap in="SourceGraphic" in2="blurred" scale="65" xChannelSelector="R" yChannelSelector="G" />
+		</filter>
+	</defs>
+</svg>
+
+<div class="container">
+	<video src="./video.mp4" autoplay loop muted playsinline></video>
+
+	<div class="box">
+		<div class="bg"></div>
+		<img src="rabbit.png" alt="" />
+		テキストあいうえおabc
+	</div>
+
+</div>
+
+</body>
+</html>
