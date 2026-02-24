@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>背景適用</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+	background-image: repeating-conic-gradient(from 0deg, #ccc 0deg 90deg, #fff 90deg 180deg);
+	background-size: 64px 64px;
+}
+
+.container {
+	position: relative;
+	padding: 64px;
+}
+
+.container video {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.box {
+	margin: 32px 0;
+	display: flex;
+	text-align: center;
+	align-items: center;
+
+	filter: url(#glass-distortion);
+	border: 1px solid red;
+}
+
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+	<defs>
+		<filter id="glass-distortion">
+			<feTurbulence type="fractalNoise" baseFrequency="0.025 0.025" numOctaves="2" result="noise" />
+			<feGaussianBlur in="noise" stdDeviation="16" result="blurred" />
+			<feDisplacementMap in="SourceGraphic" in2="blurred" scale="65" xChannelSelector="R" yChannelSelector="G" />
+		</filter>
+	</defs>
+</svg>
+
+
+<div class="box">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+
+<div class="box" style="backdrop-filter: blur(0);">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+
+</body>
+</html>
