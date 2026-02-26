@@ -17,6 +17,10 @@ body {
 }
 .filtered {
 	filter: url(#animated-filter);
+	animation: safari-force-redraw 1s infinite;
+}
+@keyframes safari-force-redraw {
+  0%, 100% { opacity: 1; }
 }
 </style>
 </head>
