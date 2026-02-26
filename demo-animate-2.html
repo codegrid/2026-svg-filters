@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>アニメーション付きSVGフィルターのデモ</title>
+<style>
+body {
+	font-size: 32px;
+	font-weight: 900;
+	color: #033;
+}
+.box {
+	position: relative;
+	display: flex;
+	text-align: center;
+	align-items: center;
+}
+
+.box::before {
+	content: '';
+	display: block;
+	position: absolute;
+	inset: 0;
+	border: 2px solid #eb65f7;
+	filter: url(#animated-filter);
+	animation: safari-force-redraw 1s infinite;
+	pointer-events: none;
+}
+@keyframes safari-force-redraw {
+  0%, 100% { opacity: 1; }
+}
+</style>
+</head>
+<body>
+<svg style="position: absolute; width: 0; height: 0;">
+  <defs>
+		<filter id="animated-filter">
+			<!-- 縦方向に流れるノイズ1 -->
+			<feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise1" seed="1" />
+			<feOffset in="noise1" dx="0" dy="0" result="offsetNoise1">
+				<animate attributeName="baseFrequency" values="512; 0;" dur="2s" repeatCount="indefinite" calcMode="linear" />
+			</feOffset>
+
+			<!-- 縦方向に流れるノイズ2（逆方向） -->
+			<feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise2" seed="2" />
+			<feOffset in="noise2" dx="0" dy="0" result="offsetNoise2">
+				<animate attributeName="baseFrequency" values="0; -512;" dur="4s" repeatCount="indefinite" calcMode="linear" />
+			</feOffset>
+
+			<!-- 横方向に流れるノイズ3 -->
+			<feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise3" seed="1" />
+			<feOffset in="noise3" dx="0" dy="0" result="offsetNoise3">
+				<animate attributeName="dx" values="512; 0;" dur="2s" repeatCount="indefinite" calcMode="linear" />
+			</feOffset>
+
+			<!-- 横方向に流れるノイズ4（逆方向） -->
+			<feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise4" seed="2" />
+			<feOffset in="noise4" dx="0" dy="0" result="offsetNoise4">
+				<animate attributeName="dx" values="0; -512;" dur="4s" repeatCount="indefinite" calcMode="linear" />
+			</feOffset>
+
+			<!-- ノイズを合成 -->
+			<feComposite in="offsetNoise1" in2="offsetNoise2" result="part1" />
+			<feComposite in="offsetNoise3" in2="offsetNoise4" result="part2" />
+			<feBlend in="part1" in2="part2" mode="color-dodge" result="combinedNoise" />
+
+			<!-- 合成したノイズで元画像を歪ませる -->
+			<feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="30" result="displaced" />
+			<feGaussianBlur stdDeviation="2" result="blurred" />
+
+			<!-- <feFlood in="displaced" flood-color="#ff6666" result="color" /> -->
+
+			<feColorMatrix
+				in="displaced"
+				type="matrix"
+				values="
+					0 0 0 0 .75
+					0 0 0 0 0
+					0 0 0 0 1
+					0 0 0 1 0
+				"
+				result="color"
+			/>
+
+			<!-- 結果をぼかしてグロー -->
+			<feMerge>
+				<feMergeNode in="blurred" />
+				<feMergeNode in="blurred" />
+				<feMergeNode in="blurred" />
+				<feMergeNode in="color" />
+			</feMerge>
+		</filter>
+  </defs>
+</svg>
+
+<div class="box">
+	<img src="rabbit.png" alt="" />
+	テキストあいうえおabc
+</div>
+</body>
+</html>
