@@ -25,13 +25,16 @@ body {
 	<defs>
 		<filter id="outline-filter">
 			<!-- 元のアルファチャンネルを膨張させる -->
-			<feMorphology in="SourceAlpha" operator="dilate" radius="4" result="dilated" />
-			<!-- 膨張した部分を青色で塗りつぶす -->
-			<feFlood flood-color="#3399E6" result="color" />
-			<feComposite in="color" in2="dilated" operator="in" result="outline" />
-			<!-- 元画像を上に重ねる -->
+			<feMorphology in="SourceAlpha" operator="dilate" radius="4" />
+			<feColorMatrix
+				type="matrix"
+				values="0 0 0 0 0.2
+				        0 0 0 0 0.6
+				        0 0 0 0 0.9
+				        0 0 0 1 0"
+			/>
 			<feMerge>
-				<feMergeNode in="outline" />
+				<feMergeNode />
 				<feMergeNode in="SourceGraphic" />
 			</feMerge>
 		</filter>
